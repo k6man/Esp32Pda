@@ -1,5 +1,6 @@
 #include "common.h"
 #include "weather.h"
+#include "../conf.h"
 
 UnixTime currentTime(0);
 
@@ -44,7 +45,7 @@ void weatherSetup( /*lv_obj_t *scr , lv_indev_t* indev_keyboard */ void ) {
   OWOC.setUnits(METRIC);
   //OWOC.setLanguage("fr");
 
-  int errorM = OWOC.setOpenWeatherKey("fd506715ad4b3f3e50857a3662753fba") ;
+  int errorM = OWOC.setOpenWeatherKey(OPENWEATHERMAP_KEY) ;
   if ( errorM ) {
     printf( " Error returned: %s\ n" , OWOC.getErrorMsgs(errorM) );
     return;
