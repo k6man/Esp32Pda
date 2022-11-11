@@ -1,3 +1,4 @@
+#pragma once
 #include <BBQ10Keyboard.h>
 #include "common.h"
 

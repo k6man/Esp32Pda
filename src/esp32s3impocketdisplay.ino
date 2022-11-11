@@ -1,4 +1,4 @@
-#include "conf.h"// must define MY_SSID and MY_SSID_PASSWD
+#include "../conf.h"// must define MY_SSID and MY_SSID_PASSWD
 
 #include <WiFi.h>
 #include <ArduinoOTA.h>

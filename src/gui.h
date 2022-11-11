@@ -1,6 +1,4 @@
-
-#ifndef _GUI_H_
-#define _GUI_H_
+#pragma once
 
 #include "common.h"
 
@@ -10,5 +8,3 @@
 
 void guiSetup( void );
 void guiLoop( void );
-
-#endif
