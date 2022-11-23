@@ -1,4 +1,5 @@
 #pragma once
+#include "board.h"
 
 #include <WiFiUdp.h>
 #include <EasyNTPClient.h>

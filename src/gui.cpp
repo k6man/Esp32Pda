@@ -5,6 +5,7 @@
 #include <LovyanGFX.hpp>
 #include "minikeyboard.h"
 // #include "esp32notifications.h"
+#include "touch.h"
 
 #include "weather.h"
 
@@ -14,6 +15,7 @@
 
 #define I2C_SCL 39
 #define I2C_SDA 38
+
 
 //#define NS2009_TOUCH  //Resistive screen driver
 #define FT6236_TOUCH //Capacitive screen driver
@@ -148,6 +150,7 @@ void pos_rotation(int *l_pos, int rotation)
 
 //texture_color16_t screen;
 texture_color24_t screen;
+//texture_value8_t screen;
 texture_alpha8_t fontAtlas;
 
 ImGuiContext *context;
@@ -261,11 +264,12 @@ void guiSetup( void ){
     //     lcd.print("ALL SUCCESS");
 
     lcd.setColorDepth(lgfx::rgb888_3Byte);
+    //lcd.setColorDepth(lgfx::grayscale_8bit);
+
+    
     //lcd.setColorDepth(lgfx::rgb565_2Byte);
     //lcd.startWrite();  // SPIバス確保
 
-  /* initilise  physical Keyboard */
-  minikeyboardSetup();
 
   context = ImGui::CreateContext();
 
@@ -277,6 +281,10 @@ void guiSetup( void ){
   style.WindowRounding   = 0.0f;
 
   ImGuiIO &io = ImGui::GetIO();
+
+  /* initilise  physical Keyboard */
+  minikeyboardSetup(io);
+
   io.Fonts->Flags |=
     ImFontAtlasFlags_NoPowerOfTwoHeight /* | ImFontAtlasFlags_NoMouseCursors */;
 
@@ -294,33 +302,6 @@ void guiSetup( void ){
   io.MouseDown[2] = false; // middle + extras
   io.MouseDown[3] = false; // 
   io.MouseDown[4] = false; // 
-
-    // io.KeyMap[ImGuiKey_Tab]         = '\t';
-    io.KeyMap[ImGuiKey_LeftArrow]   = 6; // NSLeftArrowFunctionKey + offset_for_function_keys;
-    io.KeyMap[ImGuiKey_RightArrow]  = 18; //NSRightArrowFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_UpArrow]     = NSUpArrowFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_DownArrow]   = NSDownArrowFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_PageUp]      = NSPageUpFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_PageDown]    = NSPageDownFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_Home]        = NSHomeFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_End]         = NSEndFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_Insert]      = NSInsertFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_Delete]      = NSDeleteFunctionKey + offset_for_function_keys;
-    io.KeyMap[ImGuiKey_Backspace]   = 8;
-    io.KeyMap[ImGuiKey_Space]       = 32;
-    io.KeyMap[ImGuiKey_Enter]       = 13;
-    io.KeyMap[ImGuiKey_Escape]      = 27;
-    // io.KeyMap[ImGuiKey_A]           = 'A';
-    // io.KeyMap[ImGuiKey_C]           = 'C';
-    // io.KeyMap[ImGuiKey_V]           = 'V';
-    // io.KeyMap[ImGuiKey_X]           = 'X';
-    // io.KeyMap[ImGuiKey_Y]           = 'Y';
-    // io.KeyMap[ImGuiKey_Z]           = 'Z';
-
-
-
-
-
 
 }
 

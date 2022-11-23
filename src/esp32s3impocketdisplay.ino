@@ -1,9 +1,9 @@
 #include "../conf.h"// must define MY_SSID and MY_SSID_PASSWD
+#include "common.h"
 
 #include <WiFi.h>
 #include <ArduinoOTA.h>
 
-#include "common.h"
 WiFiUDP udp;
 
 /* ntp setup */
