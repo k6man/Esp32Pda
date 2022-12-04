@@ -4,6 +4,10 @@
 #include <WiFi.h>
 #include <ArduinoOTA.h>
 
+// #include "sdcard.h"
+#include "gui.h"
+
+
 WiFiUDP udp;
 
 /* ntp setup */
@@ -11,9 +15,6 @@ EasyNTPClient ntp(udp, "pool.ntp.org", 2*(60*60)); // GMT+2
 
 
 
-// #include "sdcard.h"
-#include "gui.h"
-#include "minikeyboard.h"
 
 const char* ssid = MY_SSID;
 const char* password = MY_SSID_PASSWD;
@@ -31,8 +32,6 @@ void wifiSetup() {
     Serial.print("Local ESP32 IP: ");
     Serial.println(WiFi.localIP());
 
-    // start the WiFi OTA library with internal (flash) based storage
-    //ArduinoOTA.begin(WiFi.localIP(), "esp32s3", "esp32s3", InternalStorage);
 }
 
 void arduinoOTASetup( ) {
@@ -93,27 +92,21 @@ void setup()
     wifiSetup();
     arduinoOTASetup();
 
-    guiSetup();
+    imGuiSetup();
 
     Serial.println( "Setup done" );
 
-    //lv_example_keyboard_1();
-
-
-    // init time
+   // init time
    // currentTime.getDateTime(ntp.getUnixTime());
-
 }
 
 void loop()
 {
     
     // check for WiFi OTA updates
-    // ArduinoOTA.poll();
     ArduinoOTA.handle();
 
-    //lv_timer_handler(); /* let the GUI do its work */
-    guiLoop();
+    imGuiLoop();
     delay( 5 );
 
 }

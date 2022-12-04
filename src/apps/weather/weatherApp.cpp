@@ -1,6 +1,6 @@
 #include "common.h"
-#include "weather.h"
-#include "../conf.h"
+#include "weatherApp.hpp"
+#include "../../../conf.h"
 
 UnixTime currentTime(0);
 

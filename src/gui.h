@@ -2,9 +2,10 @@
 
 #include "common.h"
 
-#define LGFX_USE_V1
+extern unsigned long imguiDrawTime;
+extern unsigned long imguiRenderTime;
+extern unsigned long imguiRasterTime;
+extern unsigned long imguiLastTime;
 
-#define ROTATION 1
-
-void guiSetup( void );
-void guiLoop( void );
+void imGuiSetup( void );
+void imGuiLoop( void );
