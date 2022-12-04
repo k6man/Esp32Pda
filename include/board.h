@@ -305,25 +305,13 @@ extern texture_value8_t screen;
 
 inline void screen_draw()
 {
-
-//    lcd.startWrite();  // SPIバス確保
-  #if 1
    for (uint32_t x = 0; x < screenWidth; ++x) {
      for (uint32_t y = 0; y < screenHeight; ++y) {
-      //color24_t pixel = screen.at(x,y); lcd.writePixel(x, y, lcd.color888( pixel.R(), pixel.G(), pixel.B()) );
       value8_t pixel = screen.at(x,y);
-      display.drawPixel(x, y, pixel.V()); // CHR TODO a finir
-      // display.drawPixel(x, y, pixel); // CHR TODO a finir
+      display.drawPixel(x, y, pixel.V());
      }
    }
-  #endif
-
-//     lcd.setAddrWindow(0, 0, screenWidth, screenHeight);
-//     lcd.writePixels((void*)screen.pixels, screenWidth *screenHeight, false); // OK  // 24bit
-//     //lcd.pushPixels((void*)screen.pixels, screenWidth *screenHeight, false);  // 24bit
-//     //lcd.writePixelsDMA((void*)screen.pixels, screenWidth *screenHeight, false);  // 24bit
-
-//    lcd.endWrite();    // SPIバス解放
+   display.refresh();
 }
 
 
@@ -394,25 +382,19 @@ inline void lcdSetup() {
   display.clearDisplay();
 
   // text display tests
-  display.setTextSize(1);
-  display.setTextColor(BLACK);
-  display.setCursor(0,0);
-  display.println("Hello, world!");
-  display.setCursor(20,20);
-  display.println("Hello, world!");
+  // display.setTextSize(1);
+  // display.setTextColor(BLACK);
+  // display.setCursor(0,0);
+  // display.println("Hello, world!");
+  // display.setCursor(20,20);
+  // display.println("Hello, world!");
 
 }
 
 inline void lcdLoop(ImGuiIO &io) {
   // // Screen must be refreshed at least once per second
   // for(int j=0; j<4; j++) {
-     display.refresh();
-  display.setTextSize(1);
-  display.setTextColor(BLACK);
-  display.setCursor(0,0);
-  display.println("Hello, world!");
-  display.setCursor(20,20);
-  display.println("Hello, world!");
+  // display.refresh();
   //   delay(500); // 1/2 sec delay
   // } // x4 = 2 second pause between rotations    
 }
