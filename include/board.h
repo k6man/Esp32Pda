@@ -15,6 +15,11 @@
 #define I2C_SCL 39
 #define I2C_SDA 38
 
+inline void boardSetup() {
+    //I2C init
+    Wire.begin(I2C_SDA, I2C_SCL);
+}
+
 
 //#define NS2009_TOUCH  //Resistive screen driver
 #define FT6236_TOUCH //Capacitive screen driver
@@ -196,8 +201,6 @@ inline void lcdSetup() {
 //    else
 //        lcd.print("SD INIT OVER");
 
-    //I2C init
-    Wire.begin(I2C_SDA, I2C_SCL);
     byte error, address;
 
     Wire.beginTransmission(i2c_touch_addr);
@@ -291,6 +294,15 @@ static float touchY = 0;
 #include <Adafruit_GFX.h>
 #include <Adafruit_SharpMem.h>
 
+#define I2C_SCL 9// 39
+#define I2C_SDA 8 // 38
+
+
+inline void boardSetup() {
+    //I2C init
+    Wire.begin(I2C_SDA, I2C_SCL);
+}
+
 // any pins can be used
 #define SHARP_SCK  36
 #define SHARP_MOSI 35
@@ -307,8 +319,9 @@ inline void screen_draw()
 {
    for (uint32_t x = 0; x < screenWidth; ++x) {
      for (uint32_t y = 0; y < screenHeight; ++y) {
-      value8_t pixel = screen.at(x,y);
-      display.drawPixel(x, y, pixel.V());
+      // value8_t pixel = screen.at(x,y);
+      // display.drawPixel(x, y, pixel.V());
+      display.drawPixel(x, y, screen.at(x,y).V());
      }
    }
    display.refresh();
@@ -318,61 +331,76 @@ inline void screen_draw()
 #define BLACK 0
 #define WHITE 1
 
+#define IMBLACK ImVec4(0.00f, 0.00f, 0.00f, 1.00f)
+#define IMWHITE ImVec4(1.00f, 1.00f, 1.00f, 1.00f)
+
+
+
 #ifdef IMGUIMONOCHROME
 inline void imguiMonochromeTheme () {
   ImGuiStyle& style = ImGui::GetStyle();
   style.Alpha = 1.0;
   // style.WindowFillAlphaDefault = 0.83;
   // style.ChildWindowRounding = 3;
-  style.WindowRounding = 3;
-  style.GrabRounding = 1;
+  // style.WindowRounding = 3;
+  // style.GrabRounding = 1;
+  style.WindowRounding = 0;
+  style.WindowBorderSize =1;
+  style.GrabRounding = 0;
   style.GrabMinSize = 20;
-  style.FrameRounding = 3;
+  style.FrameRounding = 0;
+  style.FrameBorderSize = 1;
+  // style.FrameRounding = 3;
+ImVec4* colors = style.Colors;
+    colors[ImGuiCol_Text]                   = IMBLACK;
+    colors[ImGuiCol_TextDisabled]           = IMBLACK;
+    colors[ImGuiCol_WindowBg]               = IMWHITE;
+    colors[ImGuiCol_ChildBg]                = IMWHITE;
+    colors[ImGuiCol_PopupBg]                = IMWHITE;
+    colors[ImGuiCol_Border]                 = IMBLACK;
+    colors[ImGuiCol_BorderShadow]           = IMBLACK;
+    colors[ImGuiCol_FrameBg]                = IMWHITE;
+    colors[ImGuiCol_FrameBgHovered]         = IMBLACK;
+    colors[ImGuiCol_FrameBgActive]          = IMBLACK;
+    colors[ImGuiCol_TitleBg]                = IMWHITE;
+    colors[ImGuiCol_TitleBgActive]          = IMWHITE;
+    colors[ImGuiCol_TitleBgCollapsed]       = IMWHITE;
+    colors[ImGuiCol_MenuBarBg]              = IMWHITE;
+    colors[ImGuiCol_ScrollbarBg]            = IMWHITE;
+    colors[ImGuiCol_ScrollbarGrab]          = IMBLACK;
+    colors[ImGuiCol_ScrollbarGrabHovered]   = IMBLACK;
+    colors[ImGuiCol_ScrollbarGrabActive]    = IMBLACK;
+    colors[ImGuiCol_CheckMark]              = IMBLACK;
+    colors[ImGuiCol_SliderGrab]             = IMBLACK;
+    colors[ImGuiCol_SliderGrabActive]       = IMBLACK;
+    colors[ImGuiCol_Button]                 = IMWHITE;
+    colors[ImGuiCol_ButtonHovered]          = IMBLACK;
+    colors[ImGuiCol_ButtonActive]           = IMBLACK;
+    colors[ImGuiCol_Header]                 = IMWHITE;
+    colors[ImGuiCol_HeaderHovered]          = IMBLACK;
+    colors[ImGuiCol_HeaderActive]           = IMWHITE;
+    colors[ImGuiCol_Separator]              = colors[ImGuiCol_Border];
+    colors[ImGuiCol_SeparatorHovered]       = IMBLACK;
+    colors[ImGuiCol_SeparatorActive]        = IMBLACK;
+    colors[ImGuiCol_ResizeGrip]             = IMBLACK;
+    colors[ImGuiCol_ResizeGripHovered]      = IMBLACK;
+    colors[ImGuiCol_ResizeGripActive]       = IMBLACK;
+    colors[ImGuiCol_Tab]                    = IMWHITE;
+    colors[ImGuiCol_TabHovered]             = IMBLACK;
+    colors[ImGuiCol_TabActive]              = IMBLACK;
+    colors[ImGuiCol_TabUnfocused]           = IMWHITE;
+    colors[ImGuiCol_TabUnfocusedActive]     = IMBLACK;
+    colors[ImGuiCol_PlotLines]              = IMBLACK;
+    colors[ImGuiCol_PlotLinesHovered]       = IMWHITE;
+    colors[ImGuiCol_PlotHistogram]          = IMBLACK;
+    colors[ImGuiCol_PlotHistogramHovered]   = IMWHITE;
+    colors[ImGuiCol_TextSelectedBg]         = IMWHITE; //IMBLACK;
+    colors[ImGuiCol_DragDropTarget]         = IMBLACK;
+    colors[ImGuiCol_NavHighlight]           = IMBLACK;
+    colors[ImGuiCol_NavWindowingHighlight]  = IMBLACK;
+    colors[ImGuiCol_NavWindowingDimBg]      = IMBLACK;
+    colors[ImGuiCol_ModalWindowDimBg]       = IMBLACK;
 
-
-  style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
-  style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.00f, 0.40f, 0.41f, 1.00f);
-  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-  style.Colors[ImGuiCol_ChildWindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-  style.Colors[ImGuiCol_Border] = ImVec4(0.00f, 1.00f, 1.00f, 0.65f);
-  style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-  style.Colors[ImGuiCol_FrameBg] = ImVec4(0.44f, 0.80f, 0.80f, 0.18f);
-  style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.44f, 0.80f, 0.80f, 0.27f);
-  style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.44f, 0.81f, 0.86f, 0.66f);
-  style.Colors[ImGuiCol_TitleBg] = ImVec4(0.14f, 0.18f, 0.21f, 0.73f);
-  style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.54f);
-  style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.27f);
-  style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.20f);
-  style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.22f, 0.29f, 0.30f, 0.71f);
-  style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.00f, 1.00f, 1.00f, 0.44f);
-  style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.00f, 1.00f, 1.00f, 0.74f);
-  style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
-  // style.Colors[ImGuiCol_ComboBg] = ImVec4(0.16f, 0.24f, 0.22f, 0.60f);
-  style.Colors[ImGuiCol_CheckMark] = ImVec4(0.00f, 1.00f, 1.00f, 0.68f);
-  style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.00f, 1.00f, 1.00f, 0.36f);
-  style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.76f);
-  style.Colors[ImGuiCol_Button] = ImVec4(0.00f, 0.65f, 0.65f, 0.46f);
-  style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.01f, 1.00f, 1.00f, 0.43f);
-  style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.62f);
-  style.Colors[ImGuiCol_Header] = ImVec4(0.00f, 1.00f, 1.00f, 0.33f);
-  style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.00f, 1.00f, 1.00f, 0.42f);
-  style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.00f, 1.00f, 1.00f, 0.54f);
-  style.Colors[ImGuiCol_Column] = ImVec4(0.00f, 0.50f, 0.50f, 0.33f);
-  style.Colors[ImGuiCol_ColumnHovered] = ImVec4(0.00f, 0.50f, 0.50f, 0.47f);
-  style.Colors[ImGuiCol_ColumnActive] = ImVec4(0.00f, 0.70f, 0.70f, 1.00f);
-  style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 1.00f, 1.00f, 0.54f);
-  style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.00f, 1.00f, 1.00f, 0.74f);
-  style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
-  // style.Colors[ImGuiCol_CloseButton] = ImVec4(0.00f, 0.78f, 0.78f, 0.35f);
-  // style.Colors[ImGuiCol_CloseButtonHovered] = ImVec4(0.00f, 0.78f, 0.78f, 0.47f);
-  // style.Colors[ImGuiCol_CloseButtonActive] = ImVec4(0.00f, 0.78f, 0.78f, 1.00f);
-  style.Colors[ImGuiCol_PlotLines] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
-  style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
-  style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
-  style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
-  style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 1.00f, 1.00f, 0.22f);
-  // style.Colors[ImGuiCol_TooltipBg] = ImVec4(0.00f, 0.13f, 0.13f, 0.90f);
-  style.Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(0.04f, 0.10f, 0.09f, 0.51f);
 }
 #endif
 

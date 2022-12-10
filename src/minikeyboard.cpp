@@ -9,11 +9,11 @@ BBQ10Keyboard keyboard;
 
 void minikeyboardSetup(ImGuiIO &io) {
 
-    // io.KeyMap[ImGuiKey_Tab]         = '\t';
-    io.KeyMap[ImGuiKey_LeftArrow]   = 6; // NSLeftArrowFunctionKey + offset_for_function_keys;
-    io.KeyMap[ImGuiKey_RightArrow]  = 18; //NSRightArrowFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_UpArrow]     = NSUpArrowFunctionKey + offset_for_function_keys;
-    // io.KeyMap[ImGuiKey_DownArrow]   = NSDownArrowFunctionKey + offset_for_function_keys;
+    io.KeyMap[ImGuiKey_Tab]         = 126;//'\t';
+    io.KeyMap[ImGuiKey_LeftArrow]   = 3; // 6; // NSLeftArrowFunctionKey + offset_for_function_keys;
+    io.KeyMap[ImGuiKey_RightArrow]  = 4; // 18; //NSRightArrowFunctionKey + offset_for_function_keys;
+    io.KeyMap[ImGuiKey_UpArrow]     = 1;//NSUpArrowFunctionKey + offset_for_function_keys;
+    io.KeyMap[ImGuiKey_DownArrow]   = 2; //NSDownArrowFunctionKey + offset_for_function_keys;
     // io.KeyMap[ImGuiKey_PageUp]      = NSPageUpFunctionKey + offset_for_function_keys;
     // io.KeyMap[ImGuiKey_PageDown]    = NSPageDownFunctionKey + offset_for_function_keys;
     // io.KeyMap[ImGuiKey_Home]        = NSHomeFunctionKey + offset_for_function_keys;
@@ -24,23 +24,43 @@ void minikeyboardSetup(ImGuiIO &io) {
     io.KeyMap[ImGuiKey_Space]       = 32;
     io.KeyMap[ImGuiKey_Enter]       = 13;
     io.KeyMap[ImGuiKey_Escape]      = 27;
-    // io.KeyMap[ImGuiKey_A]           = 'A';
-    // io.KeyMap[ImGuiKey_C]           = 'C';
+    io.KeyMap[ImGuiKey_A]           = 3; // 'A';
+    io.KeyMap[ImGuiKey_C]           = 4; // 'C';
     // io.KeyMap[ImGuiKey_V]           = 'V';
     // io.KeyMap[ImGuiKey_X]           = 'X';
     // io.KeyMap[ImGuiKey_Y]           = 'Y';
     // io.KeyMap[ImGuiKey_Z]           = 'Z';
+
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
 
   keyboard.begin();
   keyboard.setBacklight(0.5f);
 }
 
 void minikeyboardLoop(ImGuiIO &io) {
+static float mouseX = 0;
+static float mouseY = 0;
+
+  const BBQ10Keyboard::TrackpadEvent track = keyboard.trackpadEvent();
+  mouseX += track.y/10;
+  mouseY += track.x/10;
+  //Serial.printf("track  x %d, x %d\r\n", track.x, track.y);
+  io.MousePos = ImVec2(mouseX, mouseY);
+
+
+
 
 const int keyCount = keyboard.keyCount();
-  if (keyCount == 0)
+  if (keyCount == 0) {
+      io.MouseDown[0] = false; // left
+      io.MouseDown[1] = false; // right
+      io.MouseDown[2] = false; // middle + extras
+      io.MouseDown[3] = false; // 
+      io.MouseDown[4] = false; // 
     return;
-
+  }
   const BBQ10Keyboard::KeyEvent key = keyboard.keyEvent();
   String state = "pressed";
   if (key.state == BBQ10Keyboard::StateLongPress)
@@ -63,17 +83,8 @@ const int keyCount = keyboard.keyCount();
       io.KeysDown[key.key] = false;
   }
 
-//     /*Get the last pressed or released key*/
-//     data->key = key.key;            
-//     if (key.state == BBQ10Keyboard::StatePress) {
-//         data->state = LV_INDEV_STATE_PR; //lvgl
-//     } if (key.state == BBQ10Keyboard::StateRelease) {
-//         data->state = LV_INDEV_STATE_REL; /:lvgl
-//     }
-//   }
-
   // pressing 'b' turns off the backlight and pressing Shift+b turns it on
-  if (key.state == BBQ10Keyboard::StatePress) {
+  if (key.state == BBQ10Keyboard::StateLongPress) {
     if (key.key == 'b') {
       keyboard.setBacklight(0);
     } else if (key.key == 'B') {

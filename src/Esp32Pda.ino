@@ -91,7 +91,7 @@ void setup()
 {
     wifiSetup();
     arduinoOTASetup();
-
+    boardSetup();
     imGuiSetup();
 
     Serial.println( "Setup done" );

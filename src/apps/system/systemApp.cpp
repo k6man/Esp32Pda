@@ -33,7 +33,7 @@ void Pda::SystemApp::guiLoop() {
 
   deltaTime -= (imguiDrawTime + imguiRenderTime + imguiRasterTime);
 
-  ImGui::Text("Frame rate: %f", ImGui::GetIO().Framerate);
+  ImGui::Text("Frame rate: %f x:%f y:%f", ImGui::GetIO().Framerate, ImGui::GetIO().MousePos[0], ImGui::GetIO().MousePos[1]);
   ImGui::Text("Render time %d ms", imguiRenderTime);
   ImGui::Text("Raster time %d ms", imguiRasterTime);
   ImGui::Text("Hardware write time %d ms", imguiDrawTime);
@@ -67,7 +67,7 @@ void Pda::SystemApp::guiLoop() {
   // }
 
   static bool check = true;
-  ImGui::Checkbox("checkbox", &check);
+  ImGui::Checkbox("checkbox", &check);ImGui::SameLine();
 
   static int e = 0;
   ImGui::RadioButton("radio a", &e, 0); ImGui::SameLine();

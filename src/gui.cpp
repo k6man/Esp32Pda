@@ -10,7 +10,7 @@ Pda::SystemApp SYSTEMAPP;
 unsigned long imguiDrawTime;
 unsigned long imguiRenderTime;
 unsigned long imguiRasterTime;
-unsigned long imguiLastTime = 0;
+unsigned long imguiLastTime{0};
 
 
 #ifdef MAKERFABS_PARALLEL_TFT // a déplacer dans un board.c ??
@@ -60,7 +60,7 @@ void imGuiSetup( void ){
   ImGuiIO &io = ImGui::GetIO();
 
   /* initilise  physical Keyboard */
-  minikeyboardSetup(io); // CHR TODO a restaurer
+  minikeyboardSetup(io);
 
   io.Fonts->Flags |=
     ImFontAtlasFlags_NoPowerOfTwoHeight /* | ImFontAtlasFlags_NoMouseCursors */;
@@ -90,7 +90,7 @@ void imGuiLoop()
   unsigned long current_time = millis();
   io.DeltaTime =  (static_cast<float>(current_time - imguiLastTime)) / 1000;
   imguiLastTime = current_time;
-  minikeyboardLoop(io); // CHR TODO a restaurer
+  minikeyboardLoop(io);
   lcdLoop(io);
 
   /* [0.0f - 1.0f] */
