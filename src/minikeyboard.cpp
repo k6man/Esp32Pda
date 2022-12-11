@@ -33,7 +33,7 @@ void minikeyboardSetup(ImGuiIO &io) {
 
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
+  io.MouseDrawCursor = true;
 
   keyboard.begin();
   keyboard.setBacklight(0.5f);
@@ -44,8 +44,9 @@ static float mouseX = 0;
 static float mouseY = 0;
 
   const BBQ10Keyboard::TrackpadEvent track = keyboard.trackpadEvent();
-  mouseX += track.y/10;
-  mouseY += track.x/10;
+  mouseX += ((float)track.x);
+  mouseY += ((float)track.y);
+  
   //Serial.printf("track  x %d, x %d\r\n", track.x, track.y);
   io.MousePos = ImVec2(mouseX, mouseY);
 

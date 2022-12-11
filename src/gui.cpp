@@ -62,7 +62,7 @@ void imGuiSetup( void ){
   /* initilise  physical Keyboard */
   minikeyboardSetup(io);
 
-  io.Fonts->Flags |=
+  io.Fonts->Flags =
     ImFontAtlasFlags_NoPowerOfTwoHeight /* | ImFontAtlasFlags_NoMouseCursors */;
 
   uint8_t *pixels;
