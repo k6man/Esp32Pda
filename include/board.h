@@ -5,6 +5,7 @@
 
 //----------------------------------------------------------------
 #ifdef MAKERFABS_PARALLEL_TFT
+#include <Wire.h>
 
 #define TOUCH
 
@@ -20,6 +21,8 @@ inline void boardSetup() {
     Wire.begin(I2C_SDA, I2C_SCL);
 }
 
+inline void boardLoop() {
+}
 
 //#define NS2009_TOUCH  //Resistive screen driver
 #define FT6236_TOUCH //Capacitive screen driver
@@ -285,23 +288,83 @@ static float touchY = 0;
       io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     }
 }
-#endif
+#endif MAKERFABS_PARALLEL_TFT
+//----------------------------------------------------------------
 
+
+
+#ifdef UM_FEATHER_S3
+#include <UMS3.h>
+extern UMS3 ums3;
+
+// Gets the battery voltage and shows it using the neopixel LED.
+// These values are all approximate, you should do your own testing and
+// find values that work for you.
+inline void checkBattery() {
+  // Get the battery voltage, corrected for the on-board voltage divider
+  // Full should be around 4.2v and empty should be around 3v
+  float battery = ums3.getBatteryVoltage();
+  Serial.println(String("Battery: ") + battery);
+
+  if (ums3.getVbusPresent()) {
+    // If USB power is present
+    if (battery < 4.0) {
+      // Charging - blue
+      ums3.setPixelColor(0x0000FF);
+    } else {
+      // Close to full - off
+      ums3.setPixelColor(0x000000);
+    }
+  } else {
+    // Else, USB power is not present (running from battery)
+    if (battery < 3.1) {
+      // Uncomment the following line to sleep when the battery is critically low
+      //esp_deep_sleep_start();
+    } else if (battery < 3.3) {
+      // Below 3.3v - red
+      ums3.setPixelColor(0xFF0000);
+    } else if (battery < 3.6) {
+      // Below 3.6v (around 50%) - orange
+      ums3.setPixelColor(0xFF8800);
+    } else {
+      // Above 3.6v - green
+      ums3.setPixelColor(0x00FF00);
+    }
+  }
+}
+
+// Define the battery check interval as five second
+#define BATTERY_CHECK_INTERVAL 5000
+
+inline void checkBatteryLoop() {
+// Store the millis of the last battery check
+static unsigned long lastBatteryCheck = 0;
+  if (lastBatteryCheck == 0 || millis() - lastBatteryCheck > BATTERY_CHECK_INTERVAL) {
+    checkBattery();
+    lastBatteryCheck = millis();
+  }
+}
+
+inline void boardSetup() {
+  // Initialize all board peripherals, call this first
+  ums3.begin();
+
+  // Brightness is 0-255. We set it to 1/3 brightness here
+  ums3.setPixelBrightness(255 / 3);
+  //I2C init
+  //Wire.begin(I2C_SDA, I2C_SCL); // TODO: a retirer ??? pas déja fait  dans UMS3.begin() ?
+}
+
+inline void boardLoop() {
+  checkBatteryLoop();
+}
+#endif //UM_FEATHER_S3
 
 
 #ifdef SHARPMEMORYDISPLAY
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_SharpMem.h>
-
-#define I2C_SCL 9// 39
-#define I2C_SDA 8 // 38
-
-
-inline void boardSetup() {
-    //I2C init
-    Wire.begin(I2C_SDA, I2C_SCL);
-}
 
 // any pins can be used
 #define SHARP_SCK  36

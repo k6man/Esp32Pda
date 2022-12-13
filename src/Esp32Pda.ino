@@ -105,9 +105,9 @@ void loop()
     
     // check for WiFi OTA updates
     ArduinoOTA.handle();
-
+  	boardLoop();
     imGuiLoop();
-    delay( 5 );
+    //delay( 5 );// ms
 
 }
 

@@ -35,6 +35,9 @@ Adafruit_SharpMem display(SHARP_SCK, SHARP_MOSI, SHARP_SS, screenWidth, screenHe
 
 #endif
 
+#ifdef UM_FEATHER_S3
+UMS3 ums3;
+#endif
 
 texture_alpha8_t fontAtlas;
 

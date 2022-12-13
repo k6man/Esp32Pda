@@ -1,6 +1,7 @@
 #include <HardwareSerial.h> // for Serial
 #include "minikeyboard.h"
 #include <Wire.h>
+#include <algorithm>
 
 #ifdef BBK20KBD
 #include <BBQ10Keyboard.h>
@@ -44,9 +45,13 @@ static float mouseX = 0;
 static float mouseY = 0;
 
   const BBQ10Keyboard::TrackpadEvent track = keyboard.trackpadEvent();
+  // update mouse position
   mouseX += ((float)track.x);
   mouseY += ((float)track.y);
-  
+  // stay mouse on screen
+  mouseX = mouseX<0 ? 0 : std::min(mouseX,(float)screenWidth);
+  mouseY = mouseY<0 ? 0 : std::min(mouseY,(float)screenHeight);
+
   //Serial.printf("track  x %d, x %d\r\n", track.x, track.y);
   io.MousePos = ImVec2(mouseX, mouseY);
 

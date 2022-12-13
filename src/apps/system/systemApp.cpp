@@ -17,6 +17,8 @@ void Pda::SystemApp::guiLoop() {
   ImGuiWindowFlags window_flags = 0;
   window_flags |= ImGuiWindowFlags_NoMove;
   window_flags |= ImGuiWindowFlags_NoResize;
+
+  
   ImGui::Begin("Launcher", nullptr, window_flags);
 
   ImGuiStyle& style = ImGui::GetStyle();
