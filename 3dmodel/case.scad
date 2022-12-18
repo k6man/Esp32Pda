@@ -14,6 +14,8 @@ module screen() {
         lcd_l = 63;
         translate([L/4,0,+h/2])
         cube(size=[lcd_L, lcd_l,thickness+2],center = true);
+        translate([L/4+lcd_L/2+5/2,0,+h/2-thickness*1/3])
+        cube(size=[5,30,thickness*2/3],center = true);
 }    
 
 module capot_superieur(){
