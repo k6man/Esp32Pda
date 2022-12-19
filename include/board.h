@@ -288,7 +288,7 @@ static float touchY = 0;
       io.MousePos = ImVec2(-FLT_MAX, -FLT_MAX);
     }
 }
-#endif MAKERFABS_PARALLEL_TFT
+#endif // MAKERFABS_PARALLEL_TFT
 //----------------------------------------------------------------
 
 
