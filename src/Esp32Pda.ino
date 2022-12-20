@@ -83,15 +83,28 @@ void arduinoOTASetup( ) {
   Serial.println("Ready");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-
-
 }
+
+
+static bool shutdown_request = false;
+void IRAM_ATTR ISR_shutdown() {
+  shutdown_request = true;
+}
+
+void shutdownSetup() {
+	pinMode(0, INPUT_PULLUP);
+	attachInterrupt(0, ISR_shutdown, CHANGE);
+}
+
+
+
 
 void setup()
 {
     wifiSetup();
     arduinoOTASetup();
     boardSetup();
+    shutdownSetup();
     imGuiSetup();
 
     Serial.println( "Setup done" );
@@ -102,12 +115,15 @@ void setup()
 
 void loop()
 {
-    
     // check for WiFi OTA updates
     ArduinoOTA.handle();
   	boardLoop();
     imGuiLoop();
     //delay( 5 );// ms
-
+    if (shutdown_request) {
+        shutdown_request = false;
+        display.clearDisplay();
+        esp_deep_sleep_start();
+    }
 }
 
