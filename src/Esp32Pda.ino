@@ -92,6 +92,7 @@ void setup()
     wifiSetup();
     arduinoOTASetup();
     boardSetup();
+    FSsetup();
     imGuiSetup();
 
     Serial.println( "Setup done" );
@@ -106,6 +107,7 @@ void loop()
     // check for WiFi OTA updates
     ArduinoOTA.handle();
   	boardLoop();
+    FSloop();
     imGuiLoop();
     //delay( 5 );// ms
 
