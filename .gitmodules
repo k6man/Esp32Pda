@@ -4,3 +4,9 @@
 [submodule "lib/BBQ10Keyboard"]
 	path = lib/BBQ10Keyboard
 	url = https://github.com/k6man/arduino_bbq10kbd.git
+[submodule "lib/Adafruit_SHARP_Memory_Display"]
+	path = lib/Adafruit_SHARP_Memory_Display
+	url = https://github.com/k6man/Adafruit_SHARP_Memory_Display.git
+[submodule "lua_arduino"]
+	path = lua_arduino
+	url = https://github.com/k6man/lua_arduino.git
