@@ -62,4 +62,4 @@ translate([3,3+tower_thickness,-board_thickness])
     plots_lcd();
 }
 
-support_lcd();
+// support_lcd();

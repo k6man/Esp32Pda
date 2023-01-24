@@ -10,3 +10,6 @@
 [submodule "lua_arduino"]
 	path = lua_arduino
 	url = https://github.com/k6man/lua_arduino.git
+[submodule "imgui_lua_bindings"]
+	path = imgui_lua_bindings
+	url = https://github.com/megumumpkin/imgui_lua_bindings.git
