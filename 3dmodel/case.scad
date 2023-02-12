@@ -1,4 +1,5 @@
 use <MCAD/boxes.scad>
+use <rcube.scad>
 use <lcd.scad>
 $fa=1;
 $fs=0.4;
@@ -8,55 +9,71 @@ h=12;
 thickness=1;
 high_box_radius=3; //3;
 low_box_radius=15; //3;
-rebord_assemblage=0.25; // %
+rebord_assemblage=0.20; // %
+
+lcd_L = 42;
+lcd_l = 64;
+
+
 
 
 module capot_superieur(){
-// tour
-difference() {
-    union(){
-        //high
-        translate([L/4*2/3,0,0])
-            roundedBox(size=[L*2/3,l,h],radius=high_box_radius,sidesonly=true);
-        //low
-        translate([-L/4*2/3,0,0])
-            roundedBox(size=[L*2/3,l,h],radius=low_box_radius,sidesonly=true);
-    }
-    union(){
-        //high
-        translate([(L/4*2/3)-thickness,0,0])
-            roundedBox(size=[L*2/3-thickness,l-thickness*2,h*2],radius=high_box_radius,sidesonly=true);
-            // rebord inferieur pour assemblage
-        translate([(L/4*2/3),0,-h/2*(1-rebord_assemblage)])
-            roundedBox(size=[(L*2/3)-thickness,l-thickness/2,h*rebord_assemblage],radius=high_box_radius,sidesonly=true);
-     
-        //low 
-        translate([-((L/4*2/3)-thickness),0,0])
-            union() {
-            roundedBox(size=[L*2/3-thickness,l-thickness*2,h*2],radius=low_box_radius,sidesonly=true);
-            // rebord inferieur pour assemblage
-            translate([-L/128,0,-h/2*(1-rebord_assemblage)])
-                roundedBox(size=[(L*2/3)-thickness,l-thickness/2,h*rebord_assemblage],radius=low_box_radius,sidesonly=true);
-            }       
-    }
-}
-    
-    // capot supérieur
-     translate([L/4,0,+h/2]) 
-    roundedBox(size=[L/2,l,thickness],radius=high_box_radius,sidesonly=true);
-     translate([L/16-6,0,+h/2]) 
-     cube(size=[L/8,l,thickness],center=true);
+    difference() {
+        // forme exterieur
+        rcube([L, l, h],
+            [low_box_radius,high_box_radius,high_box_radius,low_box_radius]);
 
-translate([0,-l/2,+h/2]) 
-    #support_lcd();
-     
+        translate([thickness,thickness,0])
+        union() {
+        // vidage interieur
+        rcube([L-2*thickness, l-2*thickness, h-thickness],
+            [low_box_radius,high_box_radius,high_box_radius,low_box_radius]);
+
+        // encoche inferieur
+        translate([-thickness/2,-thickness/2,0])
+        rcube([L-2*thickness/2, l-2*thickness/2, rebord_assemblage*h],
+            [low_box_radius,high_box_radius,high_box_radius,low_box_radius]);
+        //emplacement clavier:
+        rcube([56-2*thickness, l-2*thickness, h],
+            [low_box_radius,high_box_radius,high_box_radius,low_box_radius]);
+        }
+        //emplacemebt LCD
+        translate([ thickness+L*7.5/10-lcd_L/2,
+                    l/2-lcd_l/2,
+                    0])
+        rcube([lcd_L,lcd_l, h],
+            [0,0,0,0]);
+    }
     // keyboard
     rotate([0, 180, 0]) 
-    translate([57,-100.5,-h+3.5])
+    translate([-3,-62,-h-2.5])
     import("C:/Users/cvaug/Documents/PlatformIO/Projects/Esp32Pda/3dmodel/5393306_BBQ20_Keyboard_top_cover/files/coverplate012.stl");
 }
 
-    capot_superieur();    
+module capot_inferieur(){
+    // forme exterieur
+    rcube([L, l, thickness],
+        [low_box_radius,high_box_radius,high_box_radius,low_box_radius]);
+
+
+    translate([thickness,thickness,0]){
+    // encoche inferieur
+    translate([-thickness/2,-thickness/2,0])
+    rcube([L-2*thickness/2, l-2*thickness/2, rebord_assemblage*h],
+        [low_box_radius,high_box_radius,high_box_radius,low_box_radius]);
+    }
+
+}
+
+
+capot_superieur( );
+
+//translate([0,0,-10])
+rotate([180, 0, 0])
+translate([0,10,-h])
+capot_inferieur( );    
+
+
 
 //esp32s3
 //color("black") {
