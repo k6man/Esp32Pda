@@ -85,15 +85,18 @@ void arduinoOTASetup( ) {
   Serial.println(WiFi.localIP());
 }
 
-
+#ifdef UM_FEATHER_S3
 static bool shutdown_request = false;
 void IRAM_ATTR ISR_shutdown() {
   shutdown_request = true;
 }
+#endif
 
 void shutdownSetup() {
+  #ifdef UM_FEATHER_S3
 	pinMode(0, INPUT_PULLUP);
 	attachInterrupt(0, ISR_shutdown, CHANGE);
+  #endif
 }
 
 
@@ -120,10 +123,14 @@ void loop()
   	boardLoop();
     imGuiLoop();
     //delay( 5 );// ms
+    #ifdef UM_FEATHER_S3
     if (shutdown_request) {
         shutdown_request = false;
+        #ifdef SHARPMEMORYDISPLAY
         display.clearDisplay();
+        #endif
         esp_deep_sleep_start();
     }
+    #endif
 }
 
