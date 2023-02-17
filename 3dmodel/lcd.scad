@@ -37,8 +37,8 @@ translate([0,plot_l,0])
 #cylinder(h=board_thickness, r=plot_lcd_r);
 }
 
-module support_lcd(  box_thickness=2, tower_thickness = 2) {
-
+module support_lcd( pos = [0,0,0] ,box_thickness=2, tower_thickness = 2) {
+// TODO: rajouter translate de tout avec pos.
 // boarder:
 difference(){
     cube(size=[board_L,
@@ -55,11 +55,11 @@ difference(){
         #cube(size=[5,lcd_l,box_thickness/2], center = true);
     translate([6,(board_l+board_thickness*2)/2,box_thickness/4])
         #cube(size=[7,15,box_thickness/2], center = true);
-
 }
 
 translate([3,3+tower_thickness,-board_thickness])
     plots_lcd();
 }
 
-// support_lcd();
+support_lcd([0,0,0]);
+// hole_lcd([x,y,z]); // TODO

@@ -48,6 +48,11 @@ module capot_superieur(){
     rotate([0, 180, 0]) 
     translate([-3,-62,-h-2.5])
     import("C:/Users/cvaug/Documents/PlatformIO/Projects/Esp32Pda/3dmodel/5393306_BBQ20_Keyboard_top_cover/files/coverplate012.stl");
+    
+    // LCD
+    #support_lcd([ thickness+L*7.5/10-lcd_L/2,
+                    l/2-lcd_l/2,
+                    h-thickness]); //TODO
 }
 
 module capot_inferieur(){
