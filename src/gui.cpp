@@ -3,9 +3,11 @@
 #include "gui.h"
 #include "minikeyboard.h"
 #include "touch.h"
-#include "./apps/system/systemApp.hpp"
+#include "lua.hpp"
 
-Pda::SystemApp SYSTEMAPP;
+//#include "./apps/system/systemApp.hpp"
+
+//Pda::SystemApp SYSTEMAPP;
 
 unsigned long imguiDrawTime;
 unsigned long imguiRenderTime;
@@ -42,6 +44,10 @@ UMS3 ums3;
 texture_alpha8_t fontAtlas;
 
 ImGuiContext *context;
+
+extern lua_State* lState;
+extern void LoadImguiBindings(void) ;
+
 
 void imGuiSetup( void ){
 
@@ -82,6 +88,11 @@ void imGuiSetup( void ){
   io.MouseDown[2] = false; // middle + extras
   io.MouseDown[3] = false; // 
   io.MouseDown[4] = false; // 
+
+
+  lState = luaL_newstate();
+  luaL_openlibs(lState);
+  LoadImguiBindings();  
 
 }
 
@@ -126,9 +137,20 @@ void imGuiLoop()
   ImGui::NewFrame();
 
   // here call current App gui.
-  SYSTEMAPP.guiLoop();
+  //SYSTEMAPP.guiLoop();
+  ImGuiWindowFlags window_flags = 0;
+  window_flags |= ImGuiWindowFlags_NoMove;
+  window_flags |= ImGuiWindowFlags_NoResize;  
+  ImGui::Begin("Launcher", nullptr, window_flags);
+  ImGuiStyle& style = ImGui::GetStyle();
+  style.TouchExtraPadding = ImVec2(5.0, 5.0);
+  ImGui::SetWindowPos(ImVec2(0.0, 0.0));
+  // ImGui::SetWindowSize(ImVec2(SCREENX, SCREENY));
+  ImGui::SetWindowSize(ImVec2(screenWidth, screenHeight));
 
-
+  int ret = luaL_loadstring (lState, "imgui.Text([[ hello I m lua]]);");
+  lua_call (lState, 0, 0);
+  
   ImGui::End(); // launcher
 
   imguiRenderTime = millis();
@@ -136,6 +158,9 @@ void imGuiLoop()
   imguiRenderTime = millis() - imguiRenderTime;
 
   imguiRasterTime = millis();
+  #ifdef SHARPMEMORYDISPLAY
+  display.clearDisplayBuffer();
+  #endif
   ImGui_ImplSoftraster_RenderDrawData(ImGui::GetDrawData());
   imguiRasterTime = millis() - imguiRasterTime;
 

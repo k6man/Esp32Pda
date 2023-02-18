@@ -1,6 +1,12 @@
+#if 0
 #include "systemApp.hpp"
 
+extern void LoadImguiBindings(lua_State *lState) ;
+
 Pda::SystemApp::SystemApp() {
+    L = luaL_newstate();
+    luaL_openlibs(L);
+    LoadImguiBindings(L);
 
 }
 
@@ -41,6 +47,8 @@ void Pda::SystemApp::guiLoop() {
   ImGui::Text("Hardware write time %d ms", imguiDrawTime);
   ImGui::Text("Remaining time %d ms", deltaTime);
   ImGui::SliderFloat("SliderFloat", &f, 0.0f, 1.0f);
+  int ret = luaL_loadstring (L, "imgui.Text([[ hello I m lua]]);");
+  lua_call (L, 0, 0);
 
   // ImGui::Text("mouse x:%f y:%f ", io.MousePos[0], io.MousePos[1] );
   // ImGui::Text("io.MouseDown[0]:%s left", io.MouseDown[0] == true?"true":"false");
@@ -83,3 +91,4 @@ void Pda::SystemApp::guiLoop() {
 Pda::SystemApp::~SystemApp() {
 
 }
+#endif

@@ -362,6 +362,7 @@ inline void boardLoop() {
 
 
 #ifdef SHARPMEMORYDISPLAY
+//#define SHARPMEMORYDISPLAY_OPTIM
 
 #include <Adafruit_GFX.h>
 #include <Adafruit_SharpMem.h>
@@ -380,6 +381,7 @@ extern texture_value8_t screen;
 
 inline void screen_draw()
 {
+  #ifndef SHARPMEMORYDISPLAY_OPTIM
    for (uint32_t x = 0; x < screenWidth; ++x) {
      for (uint32_t y = 0; y < screenHeight; ++y) {
       // value8_t pixel = screen.at(x,y);
@@ -387,6 +389,7 @@ inline void screen_draw()
       display.drawPixel(x, y, screen.at(x,y).V());
      }
    }
+  #endif
    display.refresh();
 }
 
