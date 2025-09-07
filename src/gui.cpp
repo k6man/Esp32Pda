@@ -161,6 +161,9 @@ void imGuiLoop()
   #ifdef SHARPMEMORYDISPLAY
   display.clearDisplayBuffer();
   #endif
+  #ifdef MAKERFABS_PARALLEL_TFT
+  screen.clear();
+  #endif
   ImGui_ImplSoftraster_RenderDrawData(ImGui::GetDrawData());
   imguiRasterTime = millis() - imguiRasterTime;
 
